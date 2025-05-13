@@ -8,4 +8,6 @@ public enum ProtocolId
     MemoryCacheLimitSize,
     MemoryCacheGroup,
     MemoryCacheGroupCancel,
+    MemoryCacheTimer,
+    MemoryCacheBackgroundService,
 }

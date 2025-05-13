@@ -22,3 +22,4 @@
 /Users/andonghyeon/Projects/AspStudy/Protocol/obj/Debug/net9.0/refint/Protocol.dll
 /Users/andonghyeon/Projects/AspStudy/Protocol/obj/Debug/net9.0/Protocol.pdb
 /Users/andonghyeon/Projects/AspStudy/Protocol/obj/Debug/net9.0/ref/Protocol.dll
+/Users/andonghyeon/Projects/AspStudy/Protocol/obj/Debug/net9.0/Protocol.sourcelink.json

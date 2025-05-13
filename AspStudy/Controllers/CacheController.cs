@@ -165,7 +165,6 @@ namespace AspStudy.Controllers
                     !_memoryCache.TryGetValue<DateTime>("unit2", out var value2) ||
                     !_memoryCache.TryGetValue<DateTime>("unit3", out var value3))
                 {
-                    
                     // 이런식으로 캐시를 취소 토큰으로 묶으면 cancellationTokenSource가 Cancel 될 때 캐시들이 만료된다.
                     var cancellationTokenSource = new CancellationTokenSource();
 
@@ -212,6 +211,75 @@ namespace AspStudy.Controllers
             {
                 _logger.LogError(e.ToString());
                 var res = new MemoryCacheGroupCancelRes() { ProtocolResult = ProtocolResult.Error};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+        }
+        
+        // 메모리 캐시 테스트5 -> cancellationTokenSource를 이용한 캐시 자동 만료
+        [HttpPost("memory-cache-timer")]
+        public async Task MemoryCacheTimerTest()
+        {
+            try
+            {
+                var req = await _dataProcessService.DeSerializeAsync<MemoryCacheTimerReq>(Request);
+                
+                if (!_memoryCache.TryGetValue("timer", out DateTime cacheValue))
+                {
+                    cacheValue = DateTime.Now;
+
+                    // memoryCache 기능은 백그라운드에서 캐시 만료를 확인하지 않음.
+                    // TryGetValue 등 메서드를 사용해야 그때 스캐닝이 일어남.
+                    // 따라서 자동으로 캐시 만료를 관리하고싶으면 이렇게 cancellationTokenSource과 타이머를 이용해야함
+                    var cancellationTokenSource = new CancellationTokenSource(
+                        TimeSpan.FromSeconds(3));
+
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .AddExpirationToken(new CancellationChangeToken(cancellationTokenSource.Token))
+                        .RegisterPostEvictionCallback((key, value, reason, state) =>
+                        {
+                            // 만료가 일어나면 자동 콜백
+                            // 이러한 콜백에서 캐시 항목을 다시 채우면 좀 위험함
+                            // 콜백으로 캐시를 다시 채우기 전, 여러 스레드에서 동시에 캐시에 접근해 캐시 미스로
+                            // 캐시를 채우려고 시도하기 때문
+                            ((CancellationTokenSource)state).Dispose();
+                        }, cancellationTokenSource);
+
+                    _memoryCache.Set("timer", cacheValue, cacheEntryOptions);
+                }
+                
+                var res = new MemoryCacheTimerRes() { CacheTime = cacheValue, ProtocolResult = ProtocolResult.Success};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.ToString());
+                var res = new MemoryCacheTimerRes() { ProtocolResult = ProtocolResult.Error};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+        }
+        
+        // 메모리 캐시 테스트 6 -> background service를 이용한 캐시 자동 업데이트
+        [HttpPost("memory-cache-background-service")]
+        public async Task MemoryCacheBackgroundServiceTest()
+        {
+            try
+            {
+                var req = await _dataProcessService.DeSerializeAsync<MemoryCacheBackgroundServiceReq>(Request);
+
+                if (_memoryCache.TryGetValue<DateTime>("CacheTime", out var value))
+                {
+                    var res = new MemoryCacheBackgroundServiceRes() { CacheTime = value, ProtocolResult = ProtocolResult.Success};
+                    await _dataProcessService.SerializeAndSendAsync(Response, res);   
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.ToString());
+                var res = new MemoryCacheTimerRes() { ProtocolResult = ProtocolResult.Error};
                 await _dataProcessService.SerializeAndSendAsync(Response, res);
             }
         }

@@ -436,3 +436,4 @@
 /Users/andonghyeon/Projects/AspStudy/AspStudy/obj/Debug/net9.0/AspStudy.pdb
 /Users/andonghyeon/Projects/AspStudy/AspStudy/obj/Debug/net9.0/AspStudy.genruntimeconfig.cache
 /Users/andonghyeon/Projects/AspStudy/AspStudy/obj/Debug/net9.0/ref/AspStudy.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/obj/Debug/net9.0/AspStudy.sourcelink.json

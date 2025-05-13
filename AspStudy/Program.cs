@@ -1,3 +1,4 @@
+using AspStudy.BackGroundServices;
 using AspStudy.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ public class Program
 
         // 메모리 캐시 서비스 지원
         builder.Services.AddMemoryCache();
+        builder.Services.AddHostedService<CacheUpdateService>();
         
         // 컨트롤러 추가
         builder.Services.AddControllers();

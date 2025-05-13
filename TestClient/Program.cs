@@ -23,15 +23,10 @@ class Program
 
             if (input == "t")
             {
-                var req = new MemoryCacheGroupReq() { Message = input };
-                var res = await SerializeAndSendAsync(req) as MemoryCacheGroupRes;
-                Console.WriteLine(res?.Message);    
-            } else if (input == "u")
-            {
-                var req = new MemoryCacheGroupCancelReq();
-                var res = await SerializeAndSendAsync(req) as MemoryCacheGroupCancelRes;
-            }
-            
+                var req = new MemoryCacheBackgroundServiceReq();
+                var res = await SerializeAndSendAsync(req) as MemoryCacheBackgroundServiceRes;
+                Console.WriteLine(res?.CacheTime);    
+            } 
         }
     }
 

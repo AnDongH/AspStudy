@@ -6,6 +6,8 @@ namespace Protocol;
 [Union(1, typeof(MemoryCache2Res))]
 [Union(2, typeof(MemoryCacheLimitSizeRes))]
 [Union(3, typeof(MemoryCacheGroupRes))]
+[Union(4, typeof(MemoryCacheTimerRes))]
+[Union(5, typeof(MemoryCacheBackgroundServiceRes))]
 [MessagePackObject]
 public abstract class ProtocolRes
 { 

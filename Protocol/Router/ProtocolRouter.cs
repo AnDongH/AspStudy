@@ -11,5 +11,7 @@ public class ProtocolRouter
         { ProtocolId.MemoryCacheLimitSize , "cache/memory-cache-limit-size"},
         { ProtocolId.MemoryCacheGroup , "cache/memory-cache-group"},
         { ProtocolId.MemoryCacheGroupCancel , "cache/memory-cache-group-cancel"},
+        { ProtocolId.MemoryCacheTimer , "cache/memory-cache-timer"},
+        { ProtocolId.MemoryCacheBackgroundService , "cache/memory-cache-background-service"},
     };
 }
