@@ -10,4 +10,7 @@ public enum ProtocolId
     MemoryCacheGroupCancel,
     MemoryCacheTimer,
     MemoryCacheBackgroundService,
+    DistributedCache,
+    HybridCache,
+    OutputCache,
 }

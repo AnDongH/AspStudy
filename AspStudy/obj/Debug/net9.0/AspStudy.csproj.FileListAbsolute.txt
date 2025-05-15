@@ -437,3 +437,14 @@
 /Users/andonghyeon/Projects/AspStudy/AspStudy/obj/Debug/net9.0/AspStudy.genruntimeconfig.cache
 /Users/andonghyeon/Projects/AspStudy/AspStudy/obj/Debug/net9.0/ref/AspStudy.dll
 /Users/andonghyeon/Projects/AspStudy/AspStudy/obj/Debug/net9.0/AspStudy.sourcelink.json
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.Caching.Abstractions.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.Options.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.Primitives.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Pipelines.Sockets.Unofficial.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/StackExchange.Redis.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/System.Diagnostics.DiagnosticSource.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.Caching.Hybrid.dll
+/Users/andonghyeon/Projects/AspStudy/AspStudy/bin/Debug/net9.0/Microsoft.Extensions.Caching.Memory.dll

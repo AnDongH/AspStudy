@@ -13,5 +13,8 @@ public class ProtocolRouter
         { ProtocolId.MemoryCacheGroupCancel , "cache/memory-cache-group-cancel"},
         { ProtocolId.MemoryCacheTimer , "cache/memory-cache-timer"},
         { ProtocolId.MemoryCacheBackgroundService , "cache/memory-cache-background-service"},
+        { ProtocolId.DistributedCache , "cache/distributed-cache"},
+        { ProtocolId.HybridCache , "cache/hybrid-cache"},
+        { ProtocolId.OutputCache , "cache/output-cache"},
     };
 }

@@ -23,9 +23,9 @@ class Program
 
             if (input == "t")
             {
-                var req = new MemoryCacheBackgroundServiceReq();
-                var res = await SerializeAndSendAsync(req) as MemoryCacheBackgroundServiceRes;
-                Console.WriteLine(res?.CacheTime);    
+                var req = new OutputCacheReq();
+                var res = await SerializeAndSendAsync(req) as OutputCacheRes;
+                Console.WriteLine(res.CacheTime);
             } 
         }
     }

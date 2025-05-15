@@ -1,12 +1,18 @@
 using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AspStudy.Services;
+using MessagePack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using Protocol;
 
 namespace AspStudy.Controllers
@@ -23,12 +29,26 @@ namespace AspStudy.Controllers
         private readonly IMemoryCache _memoryCache;
         private readonly LimitedMemoryCacheService _limitedMemoryCacheService;
         
-        public CacheController(DataProcessService dataProcessService, ILogger<CacheController> logger, IMemoryCache memoryCache, LimitedMemoryCacheService limitedMemoryCacheService)
+        // 분산 캐시
+        private readonly IDistributedCache _distributedCache;
+        
+        // 하이브리드 캐시
+        private readonly HybridCache _hybridCache;
+        
+        public CacheController(
+            DataProcessService dataProcessService, 
+            ILogger<CacheController> logger, 
+            IMemoryCache memoryCache, 
+            LimitedMemoryCacheService limitedMemoryCacheService,
+            IDistributedCache distributedCache,
+            HybridCache hybridCache)
         {
             _dataProcessService = dataProcessService;
             _logger = logger;
             _memoryCache = memoryCache;
             _limitedMemoryCacheService = limitedMemoryCacheService;
+            _distributedCache = distributedCache;
+            _hybridCache = hybridCache;
         }
         
         // 메모리 캐시 테스트
@@ -280,6 +300,110 @@ namespace AspStudy.Controllers
             {
                 _logger.LogError(e.ToString());
                 var res = new MemoryCacheTimerRes() { ProtocolResult = ProtocolResult.Error};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+        }
+        
+        // 분산 캐시 테스트 -> redis 사용
+        [HttpPost("distributed-cache")]
+        public async Task DistributedCacheTest()
+        {
+            try
+            {
+                var req = await _dataProcessService.DeSerializeAsync<DistributedCacheReq>(Request);
+
+                var data = await _distributedCache.GetAsync("cachedTimeUTC");
+                var msg = String.Empty;
+                if (data != null)
+                {
+                    msg = Encoding.UTF8.GetString(data);
+                }
+                
+                var res = new DistributedCacheRes() { CacheTime = DateTime.Parse(msg), ProtocolResult = ProtocolResult.Success};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.ToString());
+                var res = new MemoryCacheRes() { ProtocolResult = ProtocolResult.Error};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+        }
+        
+        // 하이브리드 캐시 테스트
+        [HttpPost("hybrid-cache")]
+        public async Task HybridCacheTest()
+        {
+            try
+            {
+                var req = await _dataProcessService.DeSerializeAsync<HybridCacheReq>(Request);
+                
+                // 캐시 옵션. 메모리 캐시만 사용
+                var entryOptions1 = new HybridCacheEntryOptions
+                {
+                    LocalCacheExpiration = TimeSpan.FromMinutes(1),
+                    Flags = HybridCacheEntryFlags.DisableDistributedCache
+                };
+                
+                // 캐시 옵션. 분산 캐시만 사용
+                var entryOptions2 = new HybridCacheEntryOptions
+                {
+                    Expiration = TimeSpan.FromMinutes(1),
+                    Flags = HybridCacheEntryFlags.DisableLocalCache
+                };
+                
+                var mTime = await _hybridCache.GetOrCreateAsync("memory", 
+                    async token => {
+                        // 비동기 작업 수행
+                        await Task.Delay(100, token); // 예제용 지연
+                        return DateTime.Now; // 실제 값 반환
+                    }, 
+                    entryOptions1);
+                
+                var rTime = await _hybridCache.GetOrCreateAsync("redis", 
+                    async token => {
+                        // 비동기 작업 수행
+                        await Task.Delay(100, token); // 예제용 지연
+                        return DateTime.UtcNow; // 실제 값 반환
+                    }, 
+                    entryOptions2);
+                
+                // MessagePack은 DateTime을 무조건 UTC 타임으로 저장함...왜 이따구임?
+                var res = new HybridCacheRes()
+                {
+                    MemoryCacheTime = mTime.ToString(),
+                    RedisCacheTime = rTime.ToString(), 
+                    ProtocolResult = ProtocolResult.Success
+                };
+                
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.ToString());
+                var res = new HybridCacheRes() { ProtocolResult = ProtocolResult.Error};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+        }
+        
+        // 출력 캐싱....은 Get이나 Head에만 된다고 해서 실패
+        [HttpPost("output-cache")]
+        [OutputCache]
+        public async Task OutputCacheTest()
+        {
+            try
+            {
+                var req = await _dataProcessService.DeSerializeAsync<OutputCacheReq>(Request);
+                
+                var data = DateTime.UtcNow.ToString();
+                
+                var res = new OutputCacheRes() { CacheTime = data, ProtocolResult = ProtocolResult.Success};
+                await _dataProcessService.SerializeAndSendAsync(Response, res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.ToString());
+                var res = new OutputCacheRes() { ProtocolResult = ProtocolResult.Error};
                 await _dataProcessService.SerializeAndSendAsync(Response, res);
             }
         }

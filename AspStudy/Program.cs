@@ -1,6 +1,9 @@
+using System;
 using AspStudy.BackGroundServices;
 using AspStudy.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AspStudy;
@@ -13,7 +16,18 @@ public class Program
 
         // 메모리 캐시 서비스 지원
         builder.Services.AddMemoryCache();
+        builder.Services.AddHybridCache(); // IMemoryCache + IDistributedCache
         builder.Services.AddHostedService<CacheUpdateService>();
+        
+        // 분산 캐시 서비스. Redis
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration.GetConnectionString("MyRedisConStr"); // 레디스 연결 구성
+            options.InstanceName = "SampleInstance"; // 캐시에 사용할 레디스 키 접두사. SampleInstance + key 이렇게 저장됨..
+        });
+        
+        // 출력 캐시 서비스
+        builder.Services.AddOutputCache();
         
         // 컨트롤러 추가
         builder.Services.AddControllers();
@@ -27,7 +41,21 @@ public class Program
         
         var app = builder.Build();
         
+        // 출력 캐싱 미들웨어
+        app.UseOutputCache();
+        
         app.MapControllers();
+        
+        // 앱 시작할 때 분산 캐싱
+        app.Lifetime.ApplicationStarted.Register(() =>
+        {
+            var currentTimeUTC = DateTime.UtcNow.ToString();
+            byte[] encodedCurrentTimeUTC = System.Text.Encoding.UTF8.GetBytes(currentTimeUTC);
+            var options = new DistributedCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromSeconds(20));
+            app.Services.GetService<IDistributedCache>()
+                .Set("cachedTimeUTC", encodedCurrentTimeUTC, options);
+        });
         
         app.Run();
     }

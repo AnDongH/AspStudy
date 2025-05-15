@@ -8,6 +8,9 @@ namespace Protocol;
 [Union(3, typeof(MemoryCacheGroupReq))]
 [Union(4, typeof(MemoryCacheTimerReq))]
 [Union(5, typeof(MemoryCacheBackgroundServiceReq))]
+[Union(6, typeof(DistributedCacheReq))]
+[Union(7, typeof(HybridCacheReq))]
+[Union(8, typeof(OutputCacheReq))]
 [MessagePackObject]
 public abstract class ProtocolReq(ProtocolId protocolId)
 {
