@@ -1,5 +1,6 @@
 using System;
 using AspStudy.BackGroundServices;
+using AspStudy.CachePolicies;
 using AspStudy.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Caching.Distributed;
@@ -27,7 +28,21 @@ public class Program
         });
         
         // 출력 캐시 서비스
-        builder.Services.AddOutputCache();
+        builder.Services.AddOutputCache(options =>
+        {
+            options.AddBasePolicy(builder =>
+            {
+                builder.Expire(TimeSpan.FromSeconds(5));
+                options.AddPolicy("Expire2", builder => 
+                    builder.Expire(TimeSpan.FromSeconds(2)));
+                options.AddPolicy("Expire3", builder => 
+                    builder.Expire(TimeSpan.FromSeconds(3)));
+                
+                // 커스텀 캐시 정책 추가
+                options.AddPolicy("CachePost", PostCachePolicy.Instance);
+                
+            });
+        });
         
         // 컨트롤러 추가
         builder.Services.AddControllers();

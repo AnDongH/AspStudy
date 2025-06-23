@@ -9,7 +9,6 @@ namespace Protocol;
 [Union(4, typeof(MemoryCacheTimerRes))]
 [Union(5, typeof(MemoryCacheBackgroundServiceRes))]
 [Union(7, typeof(HybridCacheRes))]
-[Union(8, typeof(OutputCacheRes))]
 [MessagePackObject]
 public abstract class ProtocolRes
 { 

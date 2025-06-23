@@ -12,5 +12,10 @@ public enum ProtocolId
     MemoryCacheBackgroundService,
     DistributedCache,
     HybridCache,
-    OutputCache,
+
+    #region json protocol
+
+    OutputCache = 101,
+
+    #endregion
 }

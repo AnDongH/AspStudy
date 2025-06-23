@@ -41,3 +41,4 @@
 /Users/andonghyeon/Projects/AspStudy/TestClient/obj/Debug/net9.0/TestClient.genruntimeconfig.cache
 /Users/andonghyeon/Projects/AspStudy/TestClient/obj/Debug/net9.0/ref/TestClient.dll
 /Users/andonghyeon/Projects/AspStudy/TestClient/obj/Debug/net9.0/TestClient.sourcelink.json
+/Users/andonghyeon/Projects/AspStudy/TestClient/bin/Debug/net9.0/Newtonsoft.Json.dll

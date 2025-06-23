@@ -386,26 +386,31 @@ namespace AspStudy.Controllers
             }
         }
         
-        // 출력 캐싱....은 Get이나 Head에만 된다고 해서 실패
-        [HttpPost("output-cache")]
-        [OutputCache]
-        public async Task OutputCacheTest()
+        // 기본 캐시 설정
+        // 출력값을 캐시함. GET, HEAD 요청만 가능
+        // HTTP 200만 캐시함
+        // 쿠키 설정은 캐시 안함
+        // [Authorize] 가 붙는 인증이 필요한 응답은 캐시 안함
+        // 물론 커스텀 정책 만들어서 바꿀 수 있음
+        [HttpGet("output-cache")]
+        [OutputCache(PolicyName = "Expire2")]
+        public IActionResult OutputCacheTest()
         {
-            try
+            return Ok(DateTime.Now);
+        }
+        
+        // 커스텀 캐시 정책 적용
+        // Post 응답도 캐시해줌
+        [HttpPost("output-cache")]
+        [OutputCache(PolicyName = "CachePost")]
+        public IActionResult CustomOutputCacheTest()
+        {
+            var res = new JOutputCacheRes()
             {
-                var req = await _dataProcessService.DeSerializeAsync<OutputCacheReq>(Request);
-                
-                var data = DateTime.UtcNow.ToString();
-                
-                var res = new OutputCacheRes() { CacheTime = data, ProtocolResult = ProtocolResult.Success};
-                await _dataProcessService.SerializeAndSendAsync(Response, res);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.ToString());
-                var res = new OutputCacheRes() { ProtocolResult = ProtocolResult.Error};
-                await _dataProcessService.SerializeAndSendAsync(Response, res);
-            }
+                ResponseTime = DateTime.Now,
+            };
+            
+            return Ok(res);
         }
         
         private void PostEvictionCallback(object cacheKey, object cacheValue, EvictionReason evictionReason, object state)
