@@ -1,0 +1,8 @@
+/Users/fblood53/Projects/githubs/AspStudy/publish/Protocol.dll
+/Users/fblood53/Projects/githubs/AspStudy/publish/Protocol.deps.json
+/Users/fblood53/Projects/githubs/AspStudy/publish/Protocol.pdb
+/Users/fblood53/Projects/githubs/AspStudy/publish/CaseConverter.dll
+/Users/fblood53/Projects/githubs/AspStudy/publish/MessagePack.dll
+/Users/fblood53/Projects/githubs/AspStudy/publish/MessagePack.Annotations.dll
+/Users/fblood53/Projects/githubs/AspStudy/publish/Microsoft.NET.StringTools.dll
+/Users/fblood53/Projects/githubs/AspStudy/publish/Newtonsoft.Json.dll

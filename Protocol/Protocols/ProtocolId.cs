@@ -16,6 +16,20 @@ public enum ProtocolId
     #region json protocol
 
     OutputCache = 101,
-
+    OutputCacheQuery,
+    OutputCacheHeader,
+    OutputCacheValue,
+    OutputCacheValidate,
+    OutputCacheTag1,
+    OutputCacheTag2,
+    
+    RateLimitFixed,
+    RateLimitSliding,
+    RateLimitTokenBucket,
+    RateLimitConcurrency,
+    RateLimitPerUser,
+    
+    Timeout1,
+    Timeout2,
     #endregion
 }

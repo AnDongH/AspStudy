@@ -412,6 +412,94 @@ namespace AspStudy.Controllers
             
             return Ok(res);
         }
+
+        [HttpGet("output-cache-query")]
+        [OutputCache(PolicyName = "Query")]
+        public IActionResult OutputCacheQueryTest(int id)
+        {
+            var res = new JOutputCacheQueryRes()
+            {
+                Message = id + Random.Shared.Next().ToString(),
+            };
+            
+            return Ok(res);
+        }
+        
+        [HttpGet("output-cache-header")]
+        [OutputCache(PolicyName = "Header")]
+        public IActionResult OutputCacheHeaderTest([FromHeader(Name = "test-header")] string testHeader)
+        {
+            var res = new JOutputCacheQueryRes()
+            {
+                Message = testHeader + " - " + Random.Shared.Next(),
+            };
+            
+            return Ok(res);
+        }
+        
+        [HttpGet("output-cache-value")]
+        [OutputCache(PolicyName = "Value")]
+        public IActionResult OutputCacheValueTest()
+        {
+            var res = new JOutputCacheQueryRes()
+            {
+                Message = Random.Shared.Next().ToString(),
+            };
+            
+            return Ok(res);
+        }
+        
+        // ETag을 이용한 캐시 검증
+        // ETag는 리소스의 고유한 식별자를 의미함. 리소스의 내용이 변경될 때마다 달라지는 값임
+        // 이를 이용해 클라이언트는 캐시된 값이 변경되었는지 그대로인지 확인이 가능함
+        // 서버는 클라이언트에게 새 값을 줄 때마다, ETag헤더의 값을 변경해줌
+        // 클라이언트는 서버에게 요청을 보낼때마다 서버에게 받은 ETag 값을 If-None-Match 헤더에 담아 보냄
+        // 서버는 클라이언트가 보낸 If-None-Match 헤더의 값과 현재 리소스의 ETag 값을 비교함
+        // 만약 같다면, 클라이언트가 가지고 있는 캐시된 값이 최신임을 의미함. 이때 서버는 304 Not Modified 응답을 보내줌
+        // 만약 다르다면, 클라이언트가 가지고 있는 캐시된 값이 최신이 아님을 의미함. 이때 서버는 200 OK 응답과 함께 새로운 리소스를 보내줌
+        
+        // 이것 말고도 응답 헤더의 Last-Modified 헤더와 요청 헤더의 If-Modified-Since 헤더를 이용한 캐시 검증도 있음
+        // Last-Modified 헤더는 리소스가 마지막으로 수정된 시간을 나타내고, If-Modified-Since 헤더는 클라이언트가 가지고 있는 캐시된 리소스의 마지막 수정 시간을 나타냄
+        [HttpGet("output-cache-validate")]
+        [OutputCache]
+        public IActionResult OutputCacheValidateTest()
+        {
+            var res = new JOutputCacheValidateRes()
+            {
+                Message = Random.Shared.Next().ToString(),
+            };
+         
+            var etag = $"\"{Guid.NewGuid():n}\"";
+            HttpContext.Response.Headers.ETag = etag;
+            
+            return Ok(res);
+        }
+
+        // /tag로 시작하는 엔드포인트
+        // 캐시 설정에서 /tag로 시작하는 엔드포인트에 tag-test라는 태그를 추가했음
+        [HttpGet("/tag/output-cache-tag-test1")]
+        [OutputCache]
+        public IActionResult OutputCacheTagTest1()
+        {
+            var res = new JOutputCacheTag1Res
+            {
+                Message = Random.Shared.Next().ToString(),
+            };
+            return Ok(res);
+        }
+        
+        // /tag로 시작하는 엔드포인트
+        // 캐시 설정에서 /tag로 시작하는 엔드포인트에 tag-test라는 태그를 추가했음
+        [HttpGet("/tag/output-cache-tag-test2")]
+        [OutputCache]
+        public IActionResult OutputCacheTagTest2()
+        {
+            var res = new JOutputCacheTag2Res()
+            {
+                Message = Random.Shared.Next().ToString(),
+            };
+            return Ok(res);
+        }
         
         private void PostEvictionCallback(object cacheKey, object cacheValue, EvictionReason evictionReason, object state)
         {

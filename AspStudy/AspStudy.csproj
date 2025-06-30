@@ -8,8 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
-      <Folder Include="Middlewares\" />
-      <Folder Include="Repositories\Dao\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -17,6 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="CaseConverter" Version="2.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.OutputCaching.StackExchangeRedis" Version="9.0.6" />
       <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="9.5.0" />
       <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.0-preview.4.25258.110" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />

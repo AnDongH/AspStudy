@@ -23,3 +23,16 @@
 /Users/andonghyeon/Projects/AspStudy/Protocol/obj/Debug/net9.0/Protocol.pdb
 /Users/andonghyeon/Projects/AspStudy/Protocol/obj/Debug/net9.0/ref/Protocol.dll
 /Users/andonghyeon/Projects/AspStudy/Protocol/obj/Debug/net9.0/Protocol.sourcelink.json
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/bin/Debug/net9.0/Protocol.deps.json
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/bin/Debug/net9.0/Protocol.dll
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/bin/Debug/net9.0/Protocol.pdb
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.csproj.AssemblyReference.cache
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.GeneratedMSBuildEditorConfig.editorconfig
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.AssemblyInfoInputs.cache
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.AssemblyInfo.cs
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.csproj.CoreCompileInputs.cache
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.sourcelink.json
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.dll
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/refint/Protocol.dll
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/Protocol.pdb
+/Users/fblood53/Projects/githubs/AspStudy/Protocol/obj/Debug/net9.0/ref/Protocol.dll
